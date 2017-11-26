@@ -46,7 +46,7 @@ module.exports = class Game {
     }
 
 
-    for(var i = 0; i < 30; i++) {
+    for(var i = 0; i < 15; i++) {
       this.deck.push(new TransferCard(this.getRandomInt(1000,10000)))
     }
     this.shuffleDeck(merchants);
