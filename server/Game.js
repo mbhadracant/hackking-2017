@@ -24,8 +24,8 @@ function handleMerchantFile(err, data) {
 module.exports = class Game {
   constructor(player1, player2) {
     this.board = [
-      [undefined, undefined, undefined, undefined],
-      [undefined, undefined, undefined, undefined],
+      [undefined, undefined, undefined, undefined, undefined],
+      [undefined, undefined, undefined, undefined, undefined],
     ];
 
     this.player1 = new Player(player1.socket, player1.name);

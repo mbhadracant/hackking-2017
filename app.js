@@ -79,13 +79,15 @@ io.on('connection', function(socket){
         var opponent = game.getOppponent(socket.client.id);
         var boardRow = game.getBoardRow(player);
 
-        var emptyIndex = boardRow.indexOf(undefined);
-        if(emptyIndex == -1) {
-          socket.emit('notify', 'Board is full!');
-        } else {
+
           var card = player.hand[data.handIndex];
           switch(card.type) {
             case 'Customer':
+              var emptyIndex = boardRow.indexOf(undefined);
+              if(emptyIndex == -1) {
+                socket.emit('notify', 'Board is full!');
+                return;
+              }
               var card = player.hand.splice(data.handIndex,1)[0];
               boardRow[emptyIndex] = card;
               io.emit('notify', player.name + " has played a new customer");
@@ -162,7 +164,7 @@ io.on('connection', function(socket){
 
             break;
           }
-        }
+
       } else {
         socket.emit('notify', 'Not your turn!');
       }
@@ -198,7 +200,7 @@ io.on('connection', function(socket){
       }
 
       if (losePlayer) {
-        player.money -= (1000 + ((player.money / 100) * 5));
+        player.money -= (1000 + ((player.money / 100) * 5);
       }
 
       var savings = 0;
