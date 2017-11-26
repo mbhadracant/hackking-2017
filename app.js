@@ -200,7 +200,7 @@ io.on('connection', function(socket){
       }
 
       if (losePlayer) {
-        player.money -= (1000 + ((player.money / 100) * 5);
+        player.money -= (1000 + ((player.money / 100) * 5));
       }
 
       var savings = 0;
