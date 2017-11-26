@@ -36,14 +36,17 @@ module.exports = class Game {
     this.player1.socket.client.id : this.player2.socket.client.id;
     this.deck = [];
 
-
-    for(var i = 0; i < 20000; i++) {
+    this.shuffleDeck(customers);
+    for(var i = 0; i < 700; i++) {
       var customer = customers[i];
-
+      if(customer != undefined) {
       if(customer.balance > 500 && customer.balance < 9999 && customer.savings > 500 && customer.savings < 9999) {
         this.deck.push(new CustomerCard(customer.first_name, customer.balance, customer.savings));
       }
     }
+    }
+
+    console.log(this.deck.length);
 
 
     for(var i = 0; i < 15; i++) {
