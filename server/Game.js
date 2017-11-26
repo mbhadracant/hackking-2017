@@ -37,7 +37,7 @@ module.exports = class Game {
     this.deck = [];
 
 
-    for(var i = 0; i < 3000; i++) {
+    for(var i = 0; i < 10000; i++) {
       var customer = customers[i];
 
       if(customer.balance > 500 && customer.balance < 9999 && customer.savings > 500 && customer.savings < 9999) {
@@ -46,11 +46,11 @@ module.exports = class Game {
     }
 
 
-    for(var i = 0; i < 10; i++) {
+    for(var i = 0; i < 30; i++) {
       this.deck.push(new TransferCard(this.getRandomInt(1000,10000)))
     }
     this.shuffleDeck(merchants);
-    for(var i = 0; i < 10; i++) {
+    for(var i = 0; i < 30; i++) {
       var merchant = merchants[i];
 
       var categories = merchant.category;

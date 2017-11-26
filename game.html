@@ -10,8 +10,8 @@
     <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui.theme.min.css">
   </head>
   <body>
-    <div id="money-player">$20000</div>
-    <div id="money-opponent">$20000</div>
+    <div tooltip="Your money" id="money-player">$20000</div>
+    <div tooltip="Opponent's money" id="money-opponent">$20000</div>
     <div id="end-turn">End Turn</div>
     <div id="cancel">Cancel</div>
     <div class="title center-horz">
@@ -30,6 +30,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script src="/static/js/jquery-ui.min.js"></script>
+  <script src="/static/js/tippy.js"></script>
   <script>
 
   var roomName = location.pathname;
@@ -139,7 +140,7 @@
            cell = createMerchantCardCell(card);
            break;
          }
-
+         $(cell).attr("title",card.tooltip);
          $(row).append(cell);
      }
 
@@ -148,6 +149,7 @@
       socket.emit('activate', {handIndex, roomName});
      });
 
+     tippy('[title]')
 
    });
 
