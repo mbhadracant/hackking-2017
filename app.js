@@ -293,6 +293,16 @@ io.on('connection', function(socket){
     }
   });
 
+  socket.on('disconnect', function () {
+
+      for(var i = queue.length - 1; i >= 0; i--) {
+        if(queue[i][1].client.id == socket.client.id) {
+          queue.splice(i,1);
+        }
+      }
+
+  });
+
 
 });
 
