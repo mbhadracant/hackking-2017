@@ -1,37 +1,49 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-    </style>
+    <title>Game</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
   </head>
   <body>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+    <div class="title center-horz">
+      <h1>C1 Card Battle</h1>
+    </div>
+    <div class="content">
+      <h3>Click on the button below to play a battle agianst a random opponent</h3>
+      <input id="player-name" type="text" placeholder="Enter Name"/>
+      <button class="btn center-horz">Find Opponent</button>
+    </div>
+
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script>
+
+
   $(function () {
+
+    var randomString = function(length) {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for(var i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  }
+
    var socket = io();
-   $('form').submit(function(){
-     socket.emit('chat message', $('#m').val());
-     $('#m').val('');
-     return false;
+   $('.content .btn').click(function() {
+     socket.emit('add client', $("#player-name").val());
+     $(this).html("Finding Opponent...");
+     $(this).css("background","#9b0200");
+     $(this).attr("disabled",true);
    });
-   socket.on('chat message', function(msg){
-     $('#messages').append($('<li>').text(msg));
+   $("input").val(randomString(5));
+   $("input").click();
+   socket.on('redirect', function(data){
+     window.location.replace(data.roomName + "?name=" + data.name);
    });
-  });
+ });
   </script>
   </body>
 </html>

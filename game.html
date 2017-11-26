@@ -1,0 +1,264 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Game</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui.structure.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui.theme.min.css">
+  </head>
+  <body>
+    <div id="money-player">$20000</div>
+    <div id="money-opponent">$20000</div>
+    <div id="end-turn">End Turn</div>
+    <div id="cancel">Cancel</div>
+    <div class="title center-horz">
+      <h1>Game</h1>
+    </div>
+    <div class="board center-horz">
+      <div class="row">
+      </div>
+      <div class="row">
+      </div>
+    </div>
+    <div class="hand center-horz">
+      <div class="row">
+      </div>
+    </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="/static/js/jquery-ui.min.js"></script>
+  <script>
+
+  var roomName = location.pathname;
+  var selected = undefined;
+
+  $(function () {
+   var reverse = false;
+   var socket = io();
+   socket.emit('register client game', {'roomName': roomName, 'name': getUrlParameter('name')});
+
+   socket.on('set title', function(title){
+     $('.title h1').html(title);
+   });
+
+   socket.on('set reverse', function(){
+     reverse = true;
+   });
+
+   socket.on('notify', function(msg){
+     notify(msg);
+   });
+
+   socket.on('finish', function(msg){
+     finish(msg);
+   });
+
+   socket.on('update money', function(money){
+     $("#money-player").html("$" + money.player);
+     $("#money-opponent").html("$" + money.opponent);
+   });
+
+   socket.on('show cancel', function(selectedHandIndex){
+     selected = selectedHandIndex;
+     $("#cancel").show();
+   });
+
+   socket.on('hide cancel', function(){
+     $("#cancel").hide();
+   });
+
+
+   socket.on('update board', function(board){
+     $(".board").empty();
+     var boardRowDivs = $(".board")
+     for (var i = 0; i < 2; i++) {
+     var row = board[i];
+     var rowDiv = $("<div>");
+     $(rowDiv).addClass("row");
+     for(var j = 0; j < 5; j++) {
+       var cell = $("<div>");
+       $(cell).addClass("cell");
+       $(cell).attr("i", i);
+       $(cell).attr("j", j);
+       if(row[j] != undefined) {
+
+         var name = $("<div>");
+         $(name).addClass("name")
+         $(name).html(row[j].name);
+         var img = $("<img />");
+         $(img).attr("src",row[j].img);
+         var stats = $("<div>");
+         $(stats).addClass("stats")
+         $(stats).html('$' + row[j].balance + " $" + row[j].savings);
+         $(cell).append(name);
+         $(cell).append(img);
+         $(cell).append(stats);
+       }
+       $(rowDiv).append(cell);
+     }
+     $(boardRowDivs).append(rowDiv)
+     }
+
+     if(reverse) {
+       var list = $('.board');
+      var listItems = list.children('.row');
+      list.append(listItems.get().reverse());
+     }
+
+
+     $(".board .row .cell").click(function() {
+
+       if ($(this).children().length > 0) {
+         var i = $(this).attr("i");
+         var j = $(this).attr("j");
+         socket.emit('board target', {roomName, i, j, 'selectedHandIndex' : selected})
+       }
+     });
+   });
+
+   socket.on('update hand', function(cards){
+     console.log(cards);
+     var row = $(".hand .row");
+     $(row).empty();
+       for(var i = 0; i < cards.length; i++) {
+         var card = cards[i];
+         var type = card.type;
+         var cell = undefined;
+
+         switch(type) {
+           case "Customer":
+            cell = createCustomerCardCell(card);
+            break;
+           case "Transfer":
+           cell = createTransferCardCell(card);
+           break;
+           case "Merchant":
+           cell = createMerchantCardCell(card);
+           break;
+         }
+
+         $(row).append(cell);
+     }
+
+     $(".hand .cell").click(function() {
+       var handIndex = $(".hand .cell").index($(this));
+      socket.emit('activate', {handIndex, roomName});
+     });
+
+
+   });
+
+   $("#end-turn").click(function() {
+     socket.emit('end turn', roomName);
+   });
+
+   $("#cancel").hide();
+   $("#cancel").click(function() {
+     socket.emit('cancel', roomName);
+     selected = undefined;
+   });
+
+function notify(message) {
+  $(".notification").remove();
+  var msg = $("<div>");
+  $(msg).html(message);
+  $(msg).addClass("notification");
+  $(msg).hide();
+  $("body").append(msg);
+  $(msg).fadeIn();
+  setTimeout(function(){ $(msg).fadeOut(); }, 3000);
+  }
+ });
+
+ function finish(message) {
+   $(".notification").remove();
+   $(".notification").attr("disabled",true);
+   var msg = $("<div>");
+   $(msg).html(message);
+   $(msg).addClass("notification");
+   $(msg).hide();
+   $("body").append(msg);
+   $(msg).fadeIn();
+ }
+
+ function createCustomerCardCell(card) {
+    var cell = $("<div>");
+    $(cell).addClass("cell");
+    var name = $("<div>");
+    $(name).addClass("name")
+    $(name).html(card.name);
+    var img = $("<img />");
+    $(img).attr("src",card.img);
+    var stats = $("<div>");
+    $(stats).addClass("stats")
+    $(stats).html('$' + card.balance + " " + '$' + card.savings);
+    $(cell).append(name);
+    $(cell).append(img);
+    $(cell).append(stats);
+
+    return cell;
+ }
+
+ function createTransferCardCell(card) {
+    var cell = $("<div>");
+    $(cell).addClass("cell");
+    var name = $("<div>");
+    $(name).addClass("name")
+    $(name).html(card.name);
+    var img = $("<img />");
+    $(img).attr("src",card.img);
+    var stats = $("<div>");
+    $(stats).addClass("stats")
+    $(stats).html('$' + card.money);
+    $(cell).append(name);
+    $(cell).append(img);
+    $(cell).append(stats);
+
+    return cell;
+ }
+
+ function createMerchantCardCell(card) {
+    var cell = $("<div>");
+    $(cell).addClass("cell");
+    var name = $("<div>");
+    $(name).addClass("name")
+    $(name).html(card.name);
+    var img = $("<img />");
+    $(img).attr("src",card.img);
+    var stats = $("<div>");
+    $(stats).addClass("stats")
+
+      var icon = $("<i>")
+      $(icon).addClass("fa")
+      $(icon).addClass(card.icon);
+      $(stats).append(icon);
+
+
+
+    $(cell).append(name);
+    $(cell).append(img);
+    $(cell).append(stats);
+
+    return cell;
+ }
+
+ function getUrlParameter(sParam) {
+     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+         sURLVariables = sPageURL.split('&'),
+         sParameterName,
+         i;
+
+     for (i = 0; i < sURLVariables.length; i++) {
+         sParameterName = sURLVariables[i].split('=');
+
+         if (sParameterName[0] === sParam) {
+             return sParameterName[1] === undefined ? true : sParameterName[1];
+         }
+     }
+ };
+  </script>
+  </body>
+</html>

@@ -1,0 +1,213 @@
+html {
+  font-family: 'Roboto', sans-serif;
+}
+
+.title {
+  width:80%;
+  background-color: rgb(253,253,253);
+  text-align: center;
+}
+
+.center-horz {
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+.btn {
+    border: none;
+    color: white;
+    border-radius: 0px;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    color:black;
+}
+
+.content {
+   position: absolute;
+   left: 50%;
+   top: 35%;
+   -webkit-transform: translate(-50%, -35%);
+   transform: translate(-50%, -35%);
+   text-align: center;
+}
+
+.content h3 {
+  color:grey;
+}
+
+.content .btn {
+  color:white;
+  background:#4CAF50;
+  font-size:16px;
+}
+
+.content .btn:hover {
+  background:#3a8e3d;
+  cursor:pointer;
+}
+
+.board {
+  width:60%;
+  height:300px;
+  position: absolute;
+  top: 20%;
+}
+
+.row {
+  display: -webkit-flex;
+   display: flex;
+   -webkit-flex-direction: row;
+}
+ .cell {
+  position: relative;
+  width:50%;
+  border:1px solid grey;
+  height:150px;
+}
+
+.hand {
+  width:50%;
+  height:300px;
+  position: absolute;
+  top: 75%;
+}
+
+
+.hand .cell {
+  margin-left:15px;
+  margin-right:15px;
+}
+
+.cell:hover {
+  cursor:pointer;
+   transform: scale(1.25, 1.25);
+   -moz-transform: scale(1.25, 1.25);
+  -ms-transform: scale(1.25, 1.25);
+  -webkit-transform: scale(1.25, 1.25);
+  -o-transform: scale(1.25, 1.25);
+  z-index:100;
+  background:white;
+}
+
+.cell .name {
+  text-align: center;
+  height:20px;
+  color:black;
+  border:1px solid black;
+  width:100%;
+}
+
+.cell .stats {
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+  height:20px;
+  width:100%;
+}
+
+.cell img {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width:100px;
+}
+
+input[type=text] {
+  font-size:14px;
+  text-align: center;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+
+input[type=text]:focus {
+    border: 3px solid #555;
+}
+
+.notification {
+  border-radius:0px;
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  display:inline-block;
+  padding:15px;
+  background:#014d7a;
+  color:white;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+#money-player {
+  position: absolute;
+  display:inline-block;
+  color:green;
+  font-size:24px;
+  left: 5%;
+  top: 90%;
+  -webkit-transform: translate(-5%, -90%);
+  transform: translate(-5%, -90%);
+}
+
+#money-opponent {
+  position: absolute;
+  display:inline-block;
+  color:red;
+  font-size:20px;
+  left: 5%;
+  top: 95%;
+  -webkit-transform: translate(-5%, -95%);
+  transform: translate(-5%, -95%);
+}
+
+#end-turn {
+  padding:10px;
+  position: absolute;
+  display:inline-block;
+  font-size:14px;
+  border:1px solid black;
+  left: 90%;
+  top: 90%;
+  -webkit-transform: translate(-90%, -90%);
+  transform: translate(-90%, -90%);
+}
+
+#cancel {
+  padding:10px;
+  position: absolute;
+  display:inline-block;
+  background:lightgrey;
+  font-size:14px;
+  border:1px solid black;
+  left: 89%;
+  top: 98%;
+  -webkit-transform: translate(-89%, -98%);
+  transform: translate(-89%, -98%);
+}
+
+#cancel:hover {
+  background:grey;
+  color:white;
+  cursor:pointer;
+}
+
+#end-turn:hover {
+  background:black;
+  color:white;
+  cursor:pointer;
+}
+
+.fa {
+  margin-left:2px;
+  margin-right:2px;
+}
