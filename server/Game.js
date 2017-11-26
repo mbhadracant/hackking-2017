@@ -37,7 +37,7 @@ module.exports = class Game {
     this.deck = [];
 
 
-    for(var i = 0; i < 10000; i++) {
+    for(var i = 0; i < 20000; i++) {
       var customer = customers[i];
 
       if(customer.balance > 500 && customer.balance < 9999 && customer.savings > 500 && customer.savings < 9999) {
